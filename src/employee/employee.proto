@@ -1,0 +1,42 @@
+// ./src/grpc/employee/proto/employee.proto
+
+syntax = "proto3";
+
+package employee;
+
+service EmployeeService {
+  rpc GetEmployee(GetEmployeeRequest) returns (EmployeeResponse);
+  rpc CreateEmployee(CreateEmployeeRequest) returns (EmployeeResponse);
+  rpc UpdateEmployee(UpdateEmployeeRequest) returns (EmployeeResponse);
+  rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse);
+}
+
+message GetEmployeeRequest {
+  int32 id = 1;
+}
+
+message CreateEmployeeRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message UpdateEmployeeRequest {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message EmployeeResponse {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message DeleteEmployeeRequest {
+  int32 id = 1;
+}
+
+message DeleteEmployeeResponse {
+  bool success = 1;
+  string message = 2;
+}
