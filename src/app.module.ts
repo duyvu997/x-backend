@@ -1,6 +1,6 @@
+// src/app.module.ts
 import { Employee } from './employee/employee.entity';
 import { EmployeeModule } from './employee/employee.module';
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -15,6 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.DB_DATABASE || 'yourDatabase',
       entities: [Employee], // Add your entities here
       synchronize: true, // Set to false in production
+      ssl: {
+        rejectUnauthorized: false, // For self-signed certificates
+      },
     }),
     EmployeeModule,
   ],

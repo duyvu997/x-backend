@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { AppModule } from './app.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { NestFactory } from '@nestjs/core';
