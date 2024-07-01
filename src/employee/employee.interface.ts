@@ -29,3 +29,14 @@ export interface DeleteEmployeeResponse {
   success: boolean;
   message: string;
 }
+
+export interface GetEmployeesRequest {
+  page: number;
+  pageSize: number;
+}
+
+export interface GetEmployeesResponse {
+  employees: EmployeeResponse[];
+  total: number;
+}
+

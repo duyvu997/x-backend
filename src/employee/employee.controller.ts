@@ -1,57 +1,45 @@
-import { Controller, Inject } from '@nestjs/common';
 import { ClientGrpc, GrpcMethod } from '@nestjs/microservices';
-import { Observable, of } from 'rxjs';
+import { Controller, Inject } from '@nestjs/common';
 import {
   CreateEmployeeRequest,
   DeleteEmployeeRequest,
   DeleteEmployeeResponse,
   EmployeeResponse,
   GetEmployeeRequest,
-  UpdateEmployeeRequest,
+  GetEmployeesRequest,
+  UpdateEmployeeRequest
 } from './employee.interface';
 
-interface EmployeeService {
-  getEmployee(data: GetEmployeeRequest): Observable<EmployeeResponse>;
-  createEmployee(data: CreateEmployeeRequest): Observable<EmployeeResponse>;
-  updateEmployee(data: UpdateEmployeeRequest): Observable<EmployeeResponse>;
-  deleteEmployee(
-    data: DeleteEmployeeRequest,
-  ): Observable<DeleteEmployeeResponse>;
-}
+import { EmployeeService } from './employee.service';
 
 @Controller('employee')
 export class EmployeeController {
-  private employeeService: EmployeeService;
+  constructor(private readonly employeeService: EmployeeService) {}
 
-  constructor(@Inject('employee') private readonly client: ClientGrpc) {}
-
-  onModuleInit() {
-    this.employeeService =
-      this.client.getService<EmployeeService>('EmployeeService');
-  }
+  onModuleInit() {}
 
   @GrpcMethod('EmployeeService', 'GetEmployee')
-  getEmployee(data: GetEmployeeRequest): Observable<EmployeeResponse> {
-    return of({ id: 1, name: 'test', email: 'te1212st' });
+  async getEmployee(data: GetEmployeeRequest): Promise<EmployeeResponse> {
+    return await this.employeeService.getEmployeeById(data.id);
   }
 
-  @GrpcMethod('EmployeeService')
-  createEmployee(data: CreateEmployeeRequest): Observable<EmployeeResponse> {
-    // Implement logic to handle CreateEmployee gRPC method
-    return this.employeeService.createEmployee(data);
+  @GrpcMethod('EmployeeService', 'CreateEmployee')
+  async createEmployee(data: CreateEmployeeRequest): Promise<EmployeeResponse> {
+    return await this.employeeService.createEmployee(data.name, data.email);
   }
 
-  @GrpcMethod('EmployeeService')
-  updateEmployee(data: UpdateEmployeeRequest): Observable<EmployeeResponse> {
-    // Implement logic to handle UpdateEmployee gRPC method
-    return this.employeeService.updateEmployee(data);
+  @GrpcMethod('EmployeeService', 'UpdateEmployee')
+  async updateEmployee(data: UpdateEmployeeRequest): Promise<EmployeeResponse> {
+    return await this.employeeService.updateEmployee(data.id, data.name, data.email);
   }
 
-  @GrpcMethod('EmployeeService')
-  deleteEmployee(
-    data: DeleteEmployeeRequest,
-  ): Observable<DeleteEmployeeResponse> {
-    // Implement logic to handle DeleteEmployee gRPC method
-    return this.employeeService.deleteEmployee(data);
+  @GrpcMethod('EmployeeService', 'DeleteEmployee')
+  async deleteEmployee(data: DeleteEmployeeRequest) {
+    return await this.employeeService.deleteEmployee(data.id);
+  }
+
+  @GrpcMethod('EmployeeService', 'GetEmployees')
+  async getEmployees(data: GetEmployeesRequest) {
+    return await this.employeeService.getEmployees(data.page, data.pageSize);
   }
 }

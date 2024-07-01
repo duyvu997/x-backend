@@ -1,5 +1,3 @@
-// ./src/grpc/employee/proto/employee.proto
-
 syntax = "proto3";
 
 package employee;
@@ -9,6 +7,7 @@ service EmployeeService {
   rpc CreateEmployee(CreateEmployeeRequest) returns (EmployeeResponse);
   rpc UpdateEmployee(UpdateEmployeeRequest) returns (EmployeeResponse);
   rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse);
+  rpc GetEmployees(GetEmployeesRequest) returns (GetEmployeesResponse);
 }
 
 message GetEmployeeRequest {
@@ -39,4 +38,14 @@ message DeleteEmployeeRequest {
 message DeleteEmployeeResponse {
   bool success = 1;
   string message = 2;
+}
+
+message GetEmployeesRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+}
+
+message GetEmployeesResponse {
+  repeated EmployeeResponse employees = 1;
+  int32 total = 2;
 }
